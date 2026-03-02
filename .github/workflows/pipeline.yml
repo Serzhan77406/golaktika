@@ -5,26 +5,38 @@ on:
     branches: [ main ]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Клонируем репозиторий
+      uses: actions/checkout@v4
+
+    - name: докер поднимаем
+      run: docker build -t myapp . 
+
+
   test:
     runs-on: ubuntu-latest
+    needs: build
     
-    # Теперь steps находятся внутри job 'test'
+   
     steps:
       - name: Клонируем репозиторий
         uses: actions/checkout@v4
 
-             
-      - name: докер поднимаем
-        run: docker build -t myapp .
+      - name: докер поднимаем(опять)
+        run: docker build -t myapp .              
+  
           
         
       - name: тесты внутри контейнера
-        run: docker run myapp
+        run: docker run --rm myapp
          
          
-      - name: CD процесс (Деплой)
-        run: |
-          # Учти, что папка ../staging живет только внутри этого раннера
-          mkdir -p ../staging
-          cp -r . ../staging/
+      # - name: CD процесс (Деплой)
+      #   run: |
+      #     # Учти, что папка ../staging живет только внутри этого раннера
+      #     mkdir -p ../staging
+      #     cp -r . ../staging/
 
