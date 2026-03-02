@@ -15,7 +15,7 @@ jobs:
 
              
       - name: докер поднимаем
-        run: docker build -t myapp .|
+        run: docker build -t myapp .
           
         
       - name: тесты внутри контейнера
