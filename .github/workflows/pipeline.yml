@@ -14,12 +14,12 @@ jobs:
 
     - name: докер поднимаем
       run: docker build -t myapp . 
+ 
 
 
   test:
     runs-on: ubuntu-latest
-    needs: build
-    
+    needs: build 
    
     steps:
       - name: Клонируем репозиторий
@@ -32,11 +32,24 @@ jobs:
         
       - name: тесты внутри контейнера
         run: docker run --rm myapp
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build,test
+
+    steps:
+      - name: Клонируем репозиторий
+        uses: actions/checkout@v4
+
+      - name: докер поднимаем(опять)
+        run: docker build -t myapp .  
+
+        
          
-         
-      # - name: CD процесс (Деплой)
-      #   run: |
-      #     # Учти, что папка ../staging живет только внутри этого раннера
-      #     mkdir -p ../staging
-      #     cp -r . ../staging/
+
+      - name: CD процесс (Деплой)
+        run: |
+          # Учти, что папка ../staging живет только внутри этого раннера
+          mkdir -p ../staging
+          cp -r . ../staging/
 
